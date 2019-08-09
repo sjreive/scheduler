@@ -1,4 +1,4 @@
-import React, { useState }  from "react";
+import React, { useState }  from "react"; 
 import Button from "components/Button";
 import InterviewerList from "components/InterviewList"
 
@@ -8,10 +8,12 @@ export default function Form(props) {
   const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
 
-  function reset () {
-    setName("")
-    setInterviewer(null)
-  }
+  // function to clear name & interviewer DO I EVEN NEED THIS ??? *******
+  // function reset () {
+  //   setName("")
+  //   setInterviewer(null)
+  // }
+
   
   return (
     <main className="appointment__card appointment__card--create">
@@ -31,10 +33,10 @@ export default function Form(props) {
     </section>
     <section className="appointment__card-right">
     <section className="appointment__actions">
-      <Button onClick={() => props.onCancel(reset())} danger>Cancel</Button>
-      <Button onClick={() => props.onSave(interviewer, name)} confirm>Save</Button>
+      <Button onClick={props.onCancel} danger>Cancel</Button>
+      <Button onClick={() => props.onSave(name,interviewer)} confirm>Save</Button>
     </section>
     </section>
     </main>
-  );
+  );  
 } 
