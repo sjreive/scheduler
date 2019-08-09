@@ -4,7 +4,9 @@ import Header from "./header.js";
 import Show from "./show.js";
 import Empty from "./empty.js";
 import Form from "./form.js";
-import useVisualMode from "hooks/useVisualMode.js"
+import Status from "./status.js";
+import useVisualMode from "hooks/useVisualMode.js";
+import confirm  from "./confirm.js";
 
 const EMPTY = "EMPTY"
 const SHOW = "SHOW"
@@ -16,14 +18,24 @@ export default function Appointment(props) {
 
 
   function save(name, interviewer) {
+    
+    //show SAVE mode
+    transition(SAVE)
+    
     // calls a function that books
     props.bookInterview(
       props.id, {
         student: name,
         interviewer 
-      })
-    transition(SHOW);
-  }
+      }
+    )
+      // once data has been returned, show appointment
+        .then(() => {
+          transition(SHOW)
+        })
+
+  };
+
 
   // appointment mode is intially set to empty or show, dependent upon whether an interview is booked.
   let {mode, transition, back} = useVisualMode(props.interview? SHOW : EMPTY)
@@ -40,7 +52,6 @@ export default function Appointment(props) {
       interviewers={props.interviewers}
        
        onSave={(name, interviewer) => {
-          
           save(name, interviewer)
           }}
        
@@ -53,7 +64,8 @@ export default function Appointment(props) {
       onDelete={props.onDelete}/> 
       ) 
     }
+    {mode === SAVE && <Status message="SAVING" /> }
   </article>
   );
-} 
+}
 
