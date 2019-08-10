@@ -1,20 +1,34 @@
-import { useState, useEffect } from "react";
+import { useReducer, useEffect } from "react";
 
 import axios from 'axios';
 
-export default function useVisualMode(initial) {
+export default function useApplicationData(initial) {
 
-  const [state, setState] = useState({
+  const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
     appointments: {},
     interviewers: {}
   });
 
-  const setDay = day => setState({ ...state, day });
-  const setDays = days => setState(prev => ({ ...prev, days }));
-  const setAppointments = appointments => setState(prev => ({ ...prev, appointments}));
-  const setInterviewers = interviewers => setState(prev => ({...prev, interviewers}))
+function reducer(state, action) {
+  switch (action.type) {
+    case "SET_DAY":
+      return {...state, day:action.day}
+    case "SET_APPLICATION_DATA":
+      return {...state, days: action.days, appointments:action.appointments, interviewers:action.interviewers}
+    case "SET_INTERVIEW": {
+      return {...state, appointments:action.appointments, spots:action.spots}
+    }
+    default:
+      throw new Error(
+        `Tried to reduce with unsupported action type: ${action.type}`
+      );
+  }
+}
+
+  const setDay = day => dispatch({type: "SET_DAY", day});
+  const setApplicationData = (days, appointments, interviewers) => dispatch({ type: "SET_APPLICATION_DATA", days, appointments, interviewers });
 
 
   useEffect(() => {
@@ -23,11 +37,9 @@ export default function useVisualMode(initial) {
       axios.get(`http://localhost:3001/api/appointments`),
       axios.get(`http://localhost:3001/api/interviewers`)
     ]).then((resp) => {
-    setDays(resp[0].data)
-    setAppointments(resp[1].data)
-    setInterviewers(resp[2].data)
+    setApplicationData(resp[0].data, resp[1].data, resp[2].data)
   })
-  }, []);
+  }, [state]);
 
 
   function bookInterview(id, interview) {
@@ -39,7 +51,7 @@ export default function useVisualMode(initial) {
     // put request to "database" so that data persists
     return axios.put(`http://localhost:3001/api/appointments/${id}`, { interview }).then(
      // set state
-      setState({...state, appointments: appointments})
+     dispatch({type: "SET_INTERVIEW", appointments: appointments})
     ); 
   }
 
@@ -52,7 +64,7 @@ export default function useVisualMode(initial) {
     // put request to "database" so that data persists
     return axios.delete(`http://localhost:3001/api/appointments/${id}`).then(() =>
      // set state
-      setState(prev => ({...prev, appointments: temp}))
+     dispatch({type: "SET_INTERVIEW", appointments: temp})
     ); 
   }
 
