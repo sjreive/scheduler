@@ -39,16 +39,29 @@ export default function Application(props) {
   function bookInterview(id, interview) {
     console.log("STATE ====>",state);
     // make a copy of the state of appointments
-    const temp = {...state.appointments};
+    const appointments = {...state.appointments};
     // on save, add interview object copy of appointments @ that object id 
-    temp[id] = {...temp[id], interview}
-    console.log(interview);
+    appointments[id] = {...appointments[id], interview}
+    // put request to "database" so that data persists
     return axios.put(`http://localhost:3001/api/appointments/${id}`, { interview }).then(
      // set state
-      setState({...state, appointments: temp})
-    );
-   
+      setState({...state, appointments: appointments})
+    ); 
   }
+
+  function deleteInterview(id) {
+    console.log("STATE ====>",state);
+    // make a copy of the state of appointments
+    const temp= {...state.appointments}; 
+    // set interview equal to null
+    temp[id].interview = null;
+    // put request to "database" so that data persists
+    return axios.delete(`http://localhost:3001/api/appointments/${id}`).then(() =>
+     // set state
+      setState(prev => ({...prev, appointments: temp}))
+    ); 
+  }
+  
   console.log("STATE", state)
   return (
   
@@ -83,6 +96,7 @@ export default function Application(props) {
         interviewer={getInterview(state, appointment.interview).interviewer} {...appointment}
         interviewers={getInterviewersForDay(state, state.day)}
         bookInterview={bookInterview}
+        deleteInterview={deleteInterview}
          />)}
         
       </section>  
