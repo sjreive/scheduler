@@ -21,7 +21,6 @@ const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
   console.log("INTERVIEW", props.interview);
-  console.log(props.appointment);
 
   function save(name, interviewer) {
     //show SAVE mode
@@ -57,17 +56,12 @@ export default function Appointment(props) {
   );
 
   useEffect(() => {
-    console.log("USE EFFECT IS RUNNING!");
     if (props.interview && mode === EMPTY) {
-      console.log("should show!");
       transition(SHOW);
     }
     if (props.interview === null && mode === SHOW) {
       transition(EMPTY);
-      console.log("should be empty now!");
     }
-
-    return function cleanup() {};
   }, [props.interview, transition, mode]);
 
   return (

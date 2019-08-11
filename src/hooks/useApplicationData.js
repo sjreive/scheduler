@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect } from "react";
 import axios from "axios";
+import { declareTypeAlias } from "@babel/types";
 
 export default function useApplicationData(initial) {
   const [state, dispatch] = useReducer(reducer, {
@@ -19,6 +20,16 @@ export default function useApplicationData(initial) {
     });
   };
 
+  const getDayIdbyApts = function(aptid, days) {
+    for (let day in days) {
+      console.log(day);
+      if (days[day].appointments.includes(aptid)) {
+        console.log("day Id:", day);
+        return day;
+      }
+    }
+  };
+
   function reducer(state, action) {
     switch (action.type) {
       case "SET_DAY":
@@ -33,7 +44,8 @@ export default function useApplicationData(initial) {
       case "SET_INTERVIEW": {
         return {
           ...state,
-          appointments: action.appointments
+          appointments: action.appointments,
+          days: action.days
         };
       }
       default:
@@ -53,20 +65,19 @@ export default function useApplicationData(initial) {
     newSocket.addEventListener("message", event => {
       console.log("message received!", event.data);
       let data = JSON.parse(event.data);
-      let id = data.id;
-      let type = data.type;
-      let interview = data.interview;
+      let { id, type, interview } = data;
 
       const appointments = { ...state.appointments };
+      const days = [...state.days];
 
       appointments[id] = { ...appointments[id], interview };
 
-      dispatch({ type: type, appointments: appointments });
+      dispatch({ type: type, appointments: appointments, days: days });
     });
     return () => {
       newSocket.close();
     };
-  }, [state.appointments]);
+  }, [state.appointments, state.days]);
 
   useEffect(() => {
     Promise.all([
@@ -81,14 +92,27 @@ export default function useApplicationData(initial) {
   function bookInterview(id, interview) {
     // make a copy of the state of appointments
     const appointments = { ...state.appointments };
+    const days = [...state.days];
+    const day = getDayIdbyApts(id, days);
     // on save, add interview object copy of appointments @ that object id
     appointments[id] = { ...appointments[id], interview };
+    // decrement the spots value in days
+    console.log("spots:", days[day].spots);
+    days[day].spots--;
+    console.log("days copy", days, "state.days", state.days);
     // put request to "database" so that data persists
     return axios
-      .put(`http://localhost:3001/api/appointments/${id}`, { interview })
+      .put(
+        `http://localhost:3001/api/appointments/${id}`,
+        ({ interview }, days)
+      )
       .then(
         // set state
-        dispatch({ type: "SET_INTERVIEW", appointments: appointments })
+        dispatch({
+          type: "SET_INTERVIEW",
+          appointments: appointments,
+          days: days
+        })
       );
   }
 
@@ -97,12 +121,20 @@ export default function useApplicationData(initial) {
     const appointments = { ...state.appointments };
     // set interview equal to null
     appointments[id].interview = null;
+    const days = [...state.days];
+    const day = getDayIdbyApts(id, days);
+    console.log("days copy", days, "state.days", state.days);
+    days[day].spots++;
     // put request to "database" so that data persists
     return axios
       .delete(`http://localhost:3001/api/appointments/${id}`)
       .then(() =>
         // set state
-        dispatch({ type: "SET_INTERVIEW", appointments: appointments })
+        dispatch({
+          type: "SET_INTERVIEW",
+          appointments: appointments,
+          days: days
+        })
       );
   }
 

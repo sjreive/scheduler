@@ -12,19 +12,17 @@ export default function DayListItem(props) {
   // Conditional for spots remaining message
   let spotsRemaining = "";
   if (props.spots > 1) {
-    spotsRemaining = `${props.spots} spots remaining`
-  } else if (props.spots === 1){
-    spotsRemaining = `${props.spots} spot remaining`
+    spotsRemaining = `${props.spots} spots remaining`;
+  } else if (props.spots === 1) {
+    spotsRemaining = `${props.spots} spot remaining`;
   } else {
-    spotsRemaining = `no spots remaining`
+    spotsRemaining = `no spots remaining`;
   }
-  
-// {props.spots === 0 ? 'no' : props.spots} spot{props.spots !== 1 && 's'} remaining
 
-return ( 
-    <li 
-      className={dayClass} 
-      onClick={() => props.setDay(props.name)}>
+  // {props.spots === 0 ? 'no' : props.spots} spot{props.spots !== 1 && 's'} remaining
+
+  return (
+    <li className={dayClass} onClick={() => props.setDay(props.name)}>
       <h2>{props.name}</h2>
       <p>{spotsRemaining}</p>
     </li>
