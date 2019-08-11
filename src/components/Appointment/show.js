@@ -10,7 +10,6 @@ return (
     <section className="interviewer">
       <h4 className="text--light">Interviewer</h4>
       <h3 className="text--regular">{props.interviewer ? props.interviewer.name: "?"}</h3>
-      {console.log(props.interviewer)}
     </section>
   </section>
   <section className="appointment__card-right">
