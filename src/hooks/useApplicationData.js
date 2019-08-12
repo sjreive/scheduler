@@ -4,33 +4,7 @@ import { declareTypeAlias } from "@babel/types";
 import { deflateSync } from "zlib";
 
 export default function useApplicationData(initial) {
-  const [state, dispatch] = useReducer(reducer, {
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewers: {}
-  });
-
-  const setDay = day => dispatch({ type: "SET_DAY", day });
-  const setApplicationData = (days, appointments, interviewers) => {
-    dispatch({
-      type: "SET_APPLICATION_DATA",
-      days,
-      appointments,
-      interviewers
-    });
-  };
-
-  const getDayIdbyApts = function(aptid, days) {
-    for (let day in days) {
-      console.log(day);
-      if (days[day].appointments.includes(aptid)) {
-        console.log("day Id:", day);
-        return day;
-      }
-    }
-  };
-
+  // reducer function
   function reducer(state, action) {
     switch (action.type) {
       case "SET_DAY":
@@ -56,24 +30,56 @@ export default function useApplicationData(initial) {
     }
   }
 
+  // helper function to get ID of Day from appointment ID received from server
+  const getDayIdbyApts = function(aptid, days) {
+    for (let day in days) {
+      if (days[day].appointments.includes(aptid)) {
+        return day;
+      }
+    }
+  };
+
+  // useReducer takes reducer function and intial state
+  const [state, dispatch] = useReducer(reducer, {
+    day: "Monday",
+    days: [],
+    appointments: {},
+    interviewers: {}
+  });
+
+  const setDay = day => dispatch({ type: "SET_DAY", day });
+  const setApplicationData = (days, appointments, interviewers) => {
+    dispatch({
+      type: "SET_APPLICATION_DATA",
+      days,
+      appointments,
+      interviewers
+    });
+  };
+
   useEffect(() => {
     let newSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
     newSocket.addEventListener("open", () => {
-      newSocket.send("Here's some text that the server is urgently awaiting!");
       console.log("connected!");
     });
 
+    // Handles the incoming data fom the server
     newSocket.addEventListener("message", event => {
-      console.log("message received!", event.data);
+      console.log("message received!");
       let data = JSON.parse(event.data);
       let { id, type, interview } = data;
 
+      // makes copy of state
       const appointments = { ...state.appointments };
       const days = [...state.days];
+
+      // gets day ID from appointment data recieved by server
       const day = getDayIdbyApts(id, days);
 
+      // updates appointment (adds or deletes interview)
       appointments[id] = { ...appointments[id], interview };
 
+      // Update # of spots depending on whether interview is added or deleted
       if (appointments[id].interview) {
         days[day].spots--;
       } else if (appointments[id].interview === null) {
@@ -101,9 +107,10 @@ export default function useApplicationData(initial) {
     // make a copy of the state of appointments
     const appointments = { ...state.appointments };
     const days = [...state.days];
+
     // on save, add interview object copy of appointments @ that object id
     appointments[id] = { ...appointments[id], interview };
-    // decrement the spots value in days
+
     // put request to "database" so that data persists
     return axios
       .put(`http://localhost:3001/api/appointments/${id}`, { interview })
