@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect } from "react";
 import axios from "axios";
 import { declareTypeAlias } from "@babel/types";
+import { deflateSync } from "zlib";
 
 export default function useApplicationData(initial) {
   const [state, dispatch] = useReducer(reducer, {
@@ -69,8 +70,15 @@ export default function useApplicationData(initial) {
 
       const appointments = { ...state.appointments };
       const days = [...state.days];
+      const day = getDayIdbyApts(id, days);
 
       appointments[id] = { ...appointments[id], interview };
+
+      if (appointments[id].interview) {
+        days[day].spots--;
+      } else if (appointments[id].interview === null) {
+        days[day].spots++;
+      }
 
       dispatch({ type: type, appointments: appointments, days: days });
     });
@@ -93,19 +101,12 @@ export default function useApplicationData(initial) {
     // make a copy of the state of appointments
     const appointments = { ...state.appointments };
     const days = [...state.days];
-    const day = getDayIdbyApts(id, days);
     // on save, add interview object copy of appointments @ that object id
     appointments[id] = { ...appointments[id], interview };
     // decrement the spots value in days
-    console.log("spots:", days[day].spots);
-    days[day].spots--;
-    console.log("days copy", days, "state.days", state.days);
     // put request to "database" so that data persists
     return axios
-      .put(
-        `http://localhost:3001/api/appointments/${id}`,
-        ({ interview }, days)
-      )
+      .put(`http://localhost:3001/api/appointments/${id}`, { interview })
       .then(
         // set state
         dispatch({
@@ -119,12 +120,9 @@ export default function useApplicationData(initial) {
   function deleteInterview(id) {
     // make a copy of the state of appointments
     const appointments = { ...state.appointments };
+    const days = [...state.days];
     // set interview equal to null
     appointments[id].interview = null;
-    const days = [...state.days];
-    const day = getDayIdbyApts(id, days);
-    console.log("days copy", days, "state.days", state.days);
-    days[day].spots++;
     // put request to "database" so that data persists
     return axios
       .delete(`http://localhost:3001/api/appointments/${id}`)
