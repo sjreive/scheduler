@@ -9,11 +9,16 @@ export default function Form(props) {
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
   const [error, setError] = useState("");
 
-  // function to clear name & interviewer DO I EVEN NEED THIS ??? *******
-  // function reset () {
-  //   setName("")
-  //   setInterviewer(null)
-  // }
+  // function to clear name & interviewer
+  function reset() {
+    setName("");
+    setInterviewer(null);
+  }
+
+  function handleOnCancel() {
+    reset();
+    props.onCancel();
+  }
 
   // This function validates input into student name field
   function validate() {
@@ -21,6 +26,8 @@ export default function Form(props) {
       setError("Student name cannot be blank");
       return;
     }
+
+    setError("");
     props.onSave(name, interviewer);
   }
 
@@ -48,10 +55,10 @@ export default function Form(props) {
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button onClick={props.onCancel} danger>
+          <Button onClick={handleOnCancel} danger>
             Cancel
           </Button>
-          <Button onClick={() => validate()} confirm>
+          <Button onClick={validate} confirm>
             Save
           </Button>
         </section>

@@ -28,7 +28,7 @@ const state = {
       interview: { student: "Chad Takahashi", interviewer: 2 }
     }
   },
-  
+
   interviewers: {
     "2": {
       id: 2,
@@ -80,5 +80,5 @@ test("getInterview returns an object with the interviewer data", () => {
 
 test("getInterview returns null if no interview is booked", () => {
   const result = getInterview(state, state.appointments["2"].interview);
-  expect(result).toBeNull();
+  expect(result).toEqual({});
 });
