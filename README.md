@@ -2,6 +2,8 @@
 
 This React Application allows a user to book, cancel and edit 1-hour interview appointments for the week. The user can select the day of the week on the navagation menu, create a new apppointment in an empty timeslot, enter the name of the client and select an interviewer from a list of interivers that are available on the selected day. The user is also able to see how many available spots are left on any given day.
 
+![Creating a new Appointment](https://media.giphy.com/media/h3tf9iklDN21eVtDcH/giphy.gif)
+
 Use of API & Websockets allow all clients to see schedule changes in real-time.
 
 Tech Stack:
@@ -39,11 +41,7 @@ npm test
 npm run storybook
 ```
 
-## DEMO
-
-Booking an interview:
-
-![Creating a new Appointment](https://media.giphy.com/media/h3tf9iklDN21eVtDcH/giphy.gif)
+## DEMO of Application Features:
 
 Toggling Days & editing and existing interview:
 
@@ -52,6 +50,10 @@ Toggling Days & editing and existing interview:
 Responsive Design, data updates to Clients in Real-Time:
 
 ![Live updates to data](https://media.giphy.com/media/jSECWP0hte9JTH8vHf/giphy.gif)
+
+Error Handling:
+
+![Live updates to data](https://media.giphy.com/media/jVU7UaH3qaCv3ZA11S/giphy.gif)
 
 ## Dev Dependencies:
 
