@@ -58,7 +58,6 @@ export default {
 
   // Mock GET functions
   get: jest.fn(url => {
-    console.log(url);
     if (url === "http://localhost:3001/api/days") {
       return Promise.resolve({
         status: 200,
@@ -88,7 +87,6 @@ export default {
 
   // Mock PUT functions
   put: jest.fn(url => {
-    console.log(url);
     if (url.includes("http://localhost:3001/api/days")) {
       return Promise.resolve({
         status: 200,
@@ -118,8 +116,6 @@ export default {
 
   // Mock DELETE functions
   delete: jest.fn(url => {
-    console.log(url);
-
     if (url.includes("http://localhost:3001/api/appointments")) {
       /* Resolve appointments data */
       return Promise.resolve({

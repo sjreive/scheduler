@@ -19,8 +19,6 @@ export default function DayListItem(props) {
     spotsRemaining = `no spots remaining`;
   }
 
-  // {props.spots === 0 ? 'no' : props.spots} spot{props.spots !== 1 && 's'} remaining
-
   return (
     <li className={dayClass} onClick={() => props.setDay(props.name)}>
       <h2>{props.name}</h2>

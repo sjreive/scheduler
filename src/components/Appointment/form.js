@@ -50,7 +50,6 @@ export default function Form(props) {
           value={interviewer}
           onChange={setInterviewer}
         />
-        {console.log("interviewer props:", props.interviewer)}
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
@@ -66,6 +65,7 @@ export default function Form(props) {
   );
 }
 
+// To test that the value passed to "interviewer" is the correct type
 InterviewerList.propTypes = {
   value: PropTypes.number,
   onChange: PropTypes.func.isRequired
