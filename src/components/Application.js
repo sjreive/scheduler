@@ -27,7 +27,7 @@ export default function Application(props) {
           alt="Interview Scheduler"
         />
         <hr className="sidebar__separator sidebar--centered" />
-        <nav className="sidebar__menu">
+        <nav className="sidebar__menu" data-testid="day">
           {console.log("day", state.day)}
           {console.log("days:", state.days)}
           <DayList days={state.days} day={state.day} setDay={setDay} />

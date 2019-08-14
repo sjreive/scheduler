@@ -9,7 +9,7 @@ export default function Form(props) {
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
   const [error, setError] = useState("");
 
-  // function to clear name & interviewer
+  // function to clear name & interviewer, and return to EMPTY mode
   function reset() {
     setName("");
     setInterviewer(null);
@@ -26,7 +26,6 @@ export default function Form(props) {
       setError("Student name cannot be blank");
       return;
     }
-
     setError("");
     props.onSave(name, interviewer);
   }
