@@ -15,6 +15,7 @@ export default function Form(props) {
     setInterviewer(null);
   }
 
+  //
   function handleOnCancel() {
     reset();
     props.onCancel();
@@ -24,6 +25,10 @@ export default function Form(props) {
   function validate() {
     if (name === "") {
       setError("Student name cannot be blank");
+      return;
+    }
+    if (interviewer === null) {
+      setError("Please select an interviewer from the list");
       return;
     }
     setError("");
