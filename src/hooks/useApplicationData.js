@@ -65,7 +65,7 @@ export default function useApplicationData(initial) {
 
   useEffect(() => {
     // What do I put here?
-    let newSocket = new WebSocket("ws://interviewscheduler.herokuapp.com");
+    let newSocket = new WebSocket("wss://interviewscheduler.herokuapp.com");
     newSocket.addEventListener("open", () => {
       console.log("connected!");
     });
