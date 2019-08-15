@@ -58,7 +58,7 @@ export default {
 
   // Mock GET functions
   get: jest.fn(url => {
-    if (url === "https://interviewscheduler.herokuapp.com/api/days") {
+    if (url === `${process.env.REACT_APP_API_BASE_URL}api/days`) {
       return Promise.resolve({
         status: 200,
         statusText: "OK",
@@ -66,7 +66,7 @@ export default {
       });
     }
 
-    if (url === "https://interviewscheduler.herokuapp.com/api/appointments") {
+    if (url === `${process.env.REACT_APP_API_BASE_URL}api/appointments`) {
       /* Resolve appointments data */
       return Promise.resolve({
         status: 200,
@@ -75,7 +75,7 @@ export default {
       });
     }
 
-    if (url === "https://interviewscheduler.herokuapp.com/api/interviewers") {
+    if (url === `${process.env.REACT_APP_API_BASE_URL}api/interviewers`) {
       /* Resolve interviewers data */
       return Promise.resolve({
         status: 200,
@@ -87,7 +87,7 @@ export default {
 
   // Mock PUT functions
   put: jest.fn(url => {
-    if (url.includes("https://interviewscheduler.herokuapp.com/api/days")) {
+    if (url.includes(`${process.env.REACT_APP_API_BASE_URL}api/days`)) {
       return Promise.resolve({
         status: 200,
         statusText: "OK",
@@ -95,9 +95,7 @@ export default {
       });
     }
 
-    if (
-      url.includes("https://interviewscheduler.herokuapp.com/api/appointments")
-    ) {
+    if (url.includes(`${process.env.REACT_APP_API_BASE_URL}api/appointments`)) {
       /* Resolve appointments data */
       return Promise.resolve({
         status: 200,
@@ -106,9 +104,7 @@ export default {
       });
     }
 
-    if (
-      url.contains("https://interviewscheduler.herokuapp.com/api/interviewers")
-    ) {
+    if (url.contains(`${process.env.REACT_APP_API_BASE_URL}api/interviewers`)) {
       /* Resolve interviewers data */
       return Promise.resolve({
         status: 200,
@@ -120,9 +116,7 @@ export default {
 
   // Mock DELETE functions
   delete: jest.fn(url => {
-    if (
-      url.includes("https://interviewscheduler.herokuapp.com/api/appointments")
-    ) {
+    if (url.includes(`${process.env.REACT_APP_API_BASE_URL}api/appointments`)) {
       /* Resolve appointments data */
       return Promise.resolve({
         status: 200,
