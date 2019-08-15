@@ -64,6 +64,7 @@ export default function useApplicationData(initial) {
   };
 
   useEffect(() => {
+    // What do I put here?
     let newSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
     newSocket.addEventListener("open", () => {
       console.log("connected!");
@@ -101,9 +102,9 @@ export default function useApplicationData(initial) {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`http://localhost:3001/api/days`),
-      axios.get(`http://localhost:3001/api/appointments`),
-      axios.get(`http://localhost:3001/api/interviewers`)
+      axios.get(`api/days`),
+      axios.get(`api/appointments`),
+      axios.get(`api/interviewers`)
     ]).then(resp => {
       setApplicationData(resp[0].data, resp[1].data, resp[2].data);
     });
@@ -119,7 +120,9 @@ export default function useApplicationData(initial) {
 
     // put request to "database" so that data persists
     return axios
-      .put(`http://localhost:3001/api/appointments/${id}`, { interview })
+      .put(`/api/appointments/${id}`, {
+        interview
+      })
       .then(
         // set state
         dispatch({
@@ -137,16 +140,14 @@ export default function useApplicationData(initial) {
     // set interview equal to null
     appointments[id].interview = null;
     // put request to "database" so that data persists
-    return axios
-      .delete(`http://localhost:3001/api/appointments/${id}`)
-      .then(() =>
-        // set state
-        dispatch({
-          type: "SET_INTERVIEW",
-          appointments: appointments,
-          days: days
-        })
-      );
+    return axios.delete(`api/appointments/${id}`).then(() =>
+      // set state
+      dispatch({
+        type: "SET_INTERVIEW",
+        appointments: appointments,
+        days: days
+      })
+    );
   }
 
   return {
