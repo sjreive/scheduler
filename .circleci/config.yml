@@ -7,7 +7,7 @@ jobs:
     working_directory: ~/client
 
     steps:
-      - checkout
+      - checkouts
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
