@@ -4,11 +4,6 @@ import axios from "axios";
 import { declareTypeAlias } from "@babel/types";
 import { deflateSync } from "zlib";
 
-// Define base URL for react app
-// if (process.env.REACT_APP_API_BASE_URL) {
-//   axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
-// }
-
 console.log("baseURL", axios.defaults.baseURL);
 
 export default function useApplicationData(initial) {
@@ -104,9 +99,9 @@ export default function useApplicationData(initial) {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`https://interviewscheduler.herokuapp.com/api/days`),
-      axios.get(`https://interviewscheduler.herokuapp.com/api/appointments`),
-      axios.get(`https://interviewscheduler.herokuapp.com/api/interviewers`)
+      axios.get(`${process.env.REACT_APP_API_BASE_URL}api/days`),
+      axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/appointments`),
+      axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/interviewers`)
     ]).then(resp => {
       setApplicationData(resp[0].data, resp[1].data, resp[2].data);
     });
@@ -122,7 +117,7 @@ export default function useApplicationData(initial) {
 
     // put request to "database" so that data persists
     return axios
-      .put(`https://interviewscheduler.herokuapp.com/api/appointments/${id}`, {
+      .put(`${process.env.REACT_APP_API_BASE_URL}/api/appointments/${id}`, {
         interview
       })
       .then(
@@ -143,7 +138,7 @@ export default function useApplicationData(initial) {
     appointments[id].interview = null;
     // put request to "database" so that data persists
     return axios
-      .delete(`https://interviewscheduler.herokuapp.com/api/appointments/${id}`)
+      .delete(`${process.env.REACT_APP_API_BASE_URL}/api/appointments/${id}`)
       .then(() =>
         // set state
         dispatch({
