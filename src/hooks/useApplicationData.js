@@ -58,13 +58,12 @@ export default function useApplicationData(initial) {
     });
   };
 
-  useEffect(() => {
-    // What do I put here?
-    let newSocket = new WebSocket(`${process.env.REACT_APP_WEBSOCKET_URL}`);
-    newSocket.addEventListener("open", () => {
-      console.log("connected!");
-    });
+  let newSocket = new WebSocket(`${process.env.REACT_APP_WEBSOCKET_URL}`);
+  newSocket.addEventListener("open", () => {
+    console.log("connected!");
+  });
 
+  useEffect(() => {
     // Handles the incoming data fom the server
     newSocket.addEventListener("message", event => {
       console.log("message received!");
