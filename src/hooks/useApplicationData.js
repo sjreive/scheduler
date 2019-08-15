@@ -1,7 +1,13 @@
 import React, { useReducer, useEffect } from "react";
 import axios from "axios";
+
 import { declareTypeAlias } from "@babel/types";
 import { deflateSync } from "zlib";
+
+// Define base URL for react app
+if (process.env.REACT_APP_API_BASE_URL) {
+  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+}
 
 export default function useApplicationData(initial) {
   // reducer function
