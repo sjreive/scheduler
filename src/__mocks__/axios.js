@@ -58,7 +58,7 @@ export default {
 
   // Mock GET functions
   get: jest.fn(url => {
-    if (url === "http://localhost:3001/api/days") {
+    if (url === "https://interviewscheduler.herokuapp.com/api/days") {
       return Promise.resolve({
         status: 200,
         statusText: "OK",
@@ -66,7 +66,7 @@ export default {
       });
     }
 
-    if (url === "http://localhost:3001/api/appointments") {
+    if (url === "https://interviewscheduler.herokuapp.com/api/appointments") {
       /* Resolve appointments data */
       return Promise.resolve({
         status: 200,
@@ -75,7 +75,7 @@ export default {
       });
     }
 
-    if (url === "http://localhost:3001/api/interviewers") {
+    if (url === "https://interviewscheduler.herokuapp.com/api/interviewers") {
       /* Resolve interviewers data */
       return Promise.resolve({
         status: 200,
@@ -87,7 +87,7 @@ export default {
 
   // Mock PUT functions
   put: jest.fn(url => {
-    if (url.includes("http://localhost:3001/api/days")) {
+    if (url.includes("https://interviewscheduler.herokuapp.com/api/days")) {
       return Promise.resolve({
         status: 200,
         statusText: "OK",
@@ -95,7 +95,9 @@ export default {
       });
     }
 
-    if (url.includes("http://localhost:3001/api/appointments")) {
+    if (
+      url.includes("https://interviewscheduler.herokuapp.com/api/appointments")
+    ) {
       /* Resolve appointments data */
       return Promise.resolve({
         status: 200,
@@ -104,7 +106,9 @@ export default {
       });
     }
 
-    if (url.contains("http://localhost:3001/api/interviewers")) {
+    if (
+      url.contains("https://interviewscheduler.herokuapp.com/api/interviewers")
+    ) {
       /* Resolve interviewers data */
       return Promise.resolve({
         status: 200,
@@ -116,7 +120,9 @@ export default {
 
   // Mock DELETE functions
   delete: jest.fn(url => {
-    if (url.includes("http://localhost:3001/api/appointments")) {
+    if (
+      url.includes("https://interviewscheduler.herokuapp.com/api/appointments")
+    ) {
       /* Resolve appointments data */
       return Promise.resolve({
         status: 200,
