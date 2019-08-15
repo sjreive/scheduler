@@ -4,11 +4,6 @@ import axios from "axios";
 import { declareTypeAlias } from "@babel/types";
 import { deflateSync } from "zlib";
 
-// Define base URL for react app
-if (process.env.REACT_APP_API_BASE_URL) {
-  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
-}
-
 export default function useApplicationData(initial) {
   // reducer function
   function reducer(state, action) {
@@ -63,12 +58,12 @@ export default function useApplicationData(initial) {
     });
   };
 
-  useEffect(() => {
-    let newSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
-    newSocket.addEventListener("open", () => {
-      console.log("connected!");
-    });
+  let newSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+  newSocket.addEventListener("open", () => {
+    console.log("connected!");
+  });
 
+  useEffect(() => {
     // Handles the incoming data fom the server
     newSocket.addEventListener("message", event => {
       console.log("message received!");
@@ -97,7 +92,7 @@ export default function useApplicationData(initial) {
     return () => {
       newSocket.close();
     };
-  }, [state.appointments, state.days]);
+  }, [state.appointments, state.days, newSocket]);
 
   useEffect(() => {
     Promise.all([
