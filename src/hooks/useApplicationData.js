@@ -5,9 +5,9 @@ import { declareTypeAlias } from "@babel/types";
 import { deflateSync } from "zlib";
 
 // Define base URL for react app
-if (process.env.REACT_APP_API_BASE_URL) {
-  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
-}
+// if (process.env.REACT_APP_API_BASE_URL) {
+//   axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+// }
 
 export default function useApplicationData(initial) {
   // reducer function
@@ -65,7 +65,7 @@ export default function useApplicationData(initial) {
 
   useEffect(() => {
     // What do I put here?
-    let newSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    let newSocket = new WebSocket("ws://interviewscheduler.herokuapp.com");
     newSocket.addEventListener("open", () => {
       console.log("connected!");
     });
@@ -102,9 +102,9 @@ export default function useApplicationData(initial) {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`api/days`),
-      axios.get(`api/appointments`),
-      axios.get(`api/interviewers`)
+      axios.get(`https://interviewscheduler.herokuapp.com/api/days`),
+      axios.get(`https://interviewscheduler.herokuapp.com/api/appointments`),
+      axios.get(`https://interviewscheduler.herokuapp.com/api/interviewers`)
     ]).then(resp => {
       setApplicationData(resp[0].data, resp[1].data, resp[2].data);
     });
@@ -120,7 +120,7 @@ export default function useApplicationData(initial) {
 
     // put request to "database" so that data persists
     return axios
-      .put(`/api/appointments/${id}`, {
+      .put(`https://interviewscheduler.herokuapp.com/api/appointments/${id}`, {
         interview
       })
       .then(
@@ -140,14 +140,16 @@ export default function useApplicationData(initial) {
     // set interview equal to null
     appointments[id].interview = null;
     // put request to "database" so that data persists
-    return axios.delete(`api/appointments/${id}`).then(() =>
-      // set state
-      dispatch({
-        type: "SET_INTERVIEW",
-        appointments: appointments,
-        days: days
-      })
-    );
+    return axios
+      .delete(`https://interviewscheduler.herokuapp.com/api/appointments/${id}`)
+      .then(() =>
+        // set state
+        dispatch({
+          type: "SET_INTERVIEW",
+          appointments: appointments,
+          days: days
+        })
+      );
   }
 
   return {
