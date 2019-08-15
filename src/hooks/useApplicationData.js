@@ -9,6 +9,8 @@ import { deflateSync } from "zlib";
 //   axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 // }
 
+console.log("baseURL", axios.defaults.baseURL);
+
 export default function useApplicationData(initial) {
   // reducer function
   function reducer(state, action) {
